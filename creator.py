@@ -1,10 +1,13 @@
 import os
+import shutil
 import sys
 
 from PyQt5 import Qt
-from PyQt5.QtWidgets import QApplication, QVBoxLayout, QPushButton, QHBoxLayout, QLineEdit, QComboBox, QFileDialog
-from PyQt5.QtWidgets import QLabel
-from PyQt5.QtWidgets import QWidget
+from PyQt5.QtGui import QImage
+from PyQt5.QtWidgets import QApplication, QVBoxLayout, QPushButton, QHBoxLayout, QLineEdit, QComboBox, QFileDialog, \
+    QMessageBox
+from PyQt5.QtWidgets import QLabel, QWidget
+from os.path import basename
 
 # Covert internal naming with readable name
 translation_gui = {
@@ -19,6 +22,8 @@ translation_gui = {
 # Contains all buttons
 edit_list = {}
 combo_list = {}
+DESKTOP_PATH = os.path.expanduser("~/.local/share/applications/")
+ICON_PATH = os.path.expanduser("~/.local/share/icons/hicolor")
 
 
 def create_selector_layout(name: str):
@@ -74,8 +79,16 @@ def create_combo_layout(name: str, possibilities: list):
 
 def copy_icon(icon_path: str):
     # Copy icon where it needs to be
-    # ToDo
-    return os.path.basename(icon_path)
+    image = QImage(icon_path)
+    # Icon should be square
+    height = image.height()
+    icon_file = basename(icon_path)
+    acceptable_icon_size = [16, 24, 32, 48, 64, 128, 256, 512]
+    closest_size = min(acceptable_icon_size, key=lambda x: abs(x - height))
+    output_path = f"{ICON_PATH}/{closest_size}x{closest_size}/apps"
+    shutil.copyfile(icon_path, f"{output_path}/{icon_file}")
+    print(f"Icon: {icon_path} -> {output_path}")
+    return icon_file
 
 
 def generate_desktop(out_path: str):
@@ -95,17 +108,44 @@ def generate_desktop(out_path: str):
 
     # Special steps for icon (copy it first then on take file name)
     icon_path = edit_list["Icon"].displayText()
-    icon = copy_icon(icon_path)
-    f.write(f"Icon={icon}\n")
+    if icon_path:
+        icon = copy_icon(icon_path)
+        f.write(f"Icon={icon}\n")
 
     # Adding more details
     for i in ["Type", "Terminal"]:
         f.write(f"{i}={combo_list[i].currentText()}\n")
 
-
     f.close()
 
 
+def post_run():
+    # If there are refresh commands to run
+    print("Refreshing icons")
+    if shutil.which("gtk-update-icon-cache") is not None:
+        os.system(f"gtk-update-icon-cache {ICON_PATH} -t")
+
+
+def install_desktop():
+    desktop_file = edit_list["Exec"].displayText()
+    desktop_icon = edit_list["Icon"].displayText()
+
+    copy_icon(desktop_icon)
+    shutil.copyfile(desktop_file, f"{DESKTOP_PATH}/{basename(desktop_file)}")
+
+
+def intercept(func):
+    def show_error():
+        try:
+            func()
+        except Exception as e:
+            msg_box = QMessageBox()
+            msg_box.setText(f"Error occurred: {e}")
+            msg_box.exec()
+    return show_error
+
+
+@intercept
 def run():
     print("-" * 10, "\nList")
     for i, j in edit_list.items():
@@ -114,7 +154,17 @@ def run():
     for i, j in combo_list.items():
         print("  ", i, j.currentText())
     # CHECK first if input is .desktop is yes just install it with Icon
-    generate_desktop("Test.desktop")
+    desktop_path = DESKTOP_PATH + edit_list["Name"].displayText() + ".desktop"
+    desktop_path = "Test.desktop"
+    is_desktop = edit_list["Exec"].displayText().endswith('.desktop')
+    print("Desktop:", desktop_path)
+    if not is_desktop:
+        print("Generating Desktop shortcut")
+        generate_desktop(desktop_path)
+    else:
+        print("Copying Desktop shortcut")
+        install_desktop()
+    post_run()
 
 
 if __name__ == '__main__':
