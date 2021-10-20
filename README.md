@@ -34,3 +34,5 @@ Name[en_US]=faf.desktop
 
 # Documentation
 https://specifications.freedesktop.org/desktop-entry-spec/latest/
+
+https://specifications.freedesktop.org/desktop-entry-spec/latest/ar01s06.html
