@@ -157,7 +157,7 @@ def post_run():
 def install_desktop():
     desktop_file = edit_list["Exec"].displayText()
     desktop_icon = edit_list["Icon"].displayText()
-    # ToDo look inside desktop for icon
+    # ToDo look inside desktop for icon, MAYBE?
     copy_icon(desktop_icon, basename(desktop_file).replace(".desktop", ""))
     shutil.copyfile(desktop_file, f"{DESKTOP_PATH}/{basename(desktop_file)}")
 
