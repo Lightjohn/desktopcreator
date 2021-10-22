@@ -1,13 +1,22 @@
 # desktopcreator
-Linux desktop files creator
+
+A simple linux desktop files creator for simple shortcuts or installing `.desktop` files.
 
 
-# GUI
+# Interface
 
-elements:
-* select desktop OR executable OR enter command
+![Screenshot](screenshot.png)
+
+# Details
+
+* **Name**: Short name of the desktop, will be used many times. Make it short and simple.
+* **Generic** name: More details about your app
+* **Exec**: path to executable. Better to be without spaces or specific symbols.
+* **Icon**: path to Icon, should be squared and size 256x256 or 512x512.
 
 # Notes
+
+Application will write in these folders
 
 * `~/.local/share/applications/`
 * `~/.local/share/icons/hicolor`
@@ -23,12 +32,10 @@ Exec=/home/light/Downloads/downlords-faf-client-1.5.0/downlords-faf-client
 Path=/home/light/Downloads/downlords-faf-client-1.5.0/
 Icon=faf
 Terminal=false
-Name[en_US]=faf.desktop
 ```
 
-# Bonus
+# Bonus Todo
 
-* Comment
 * MimeType
 * Categories
 
@@ -36,3 +43,9 @@ Name[en_US]=faf.desktop
 https://specifications.freedesktop.org/desktop-entry-spec/latest/
 
 https://specifications.freedesktop.org/desktop-entry-spec/latest/ar01s06.html
+
+# Installation
+
+`pip install -r requirements.txt`
+
+`python3 creator.py`
