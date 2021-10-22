@@ -1,4 +1,4 @@
-# desktopcreator
+# Desktop Creator
 
 A simple linux desktop files creator for simple shortcuts or installing `.desktop` files.
 
@@ -9,17 +9,23 @@ A simple linux desktop files creator for simple shortcuts or installing `.deskto
 
 # Details
 
-* **Name**: Short name of the desktop, will be used many times. Make it short and simple.
-* **Generic** name: More details about your app
+* **Name**: Short name of the shortcut, will be used many times. Make it short and simple.
+* **Generic name**: More details about your app
 * **Exec**: path to executable. Better to be without spaces or specific symbols.
 * **Icon**: path to Icon, should be squared and size 256x256 or 512x512.
+
+# Installation
+
+`pip install -r requirements.txt`
+
+`python3 creator.py`
 
 # Notes
 
 Application will write in these folders
 
 * `~/.local/share/applications/`
-* `~/.local/share/icons/hicolor`
+* `~/.local/share/icons/hicolor/`
 
 # Example
 
@@ -40,12 +46,7 @@ Terminal=false
 * Categories
 
 # Documentation
+
 https://specifications.freedesktop.org/desktop-entry-spec/latest/
 
 https://specifications.freedesktop.org/desktop-entry-spec/latest/ar01s06.html
-
-# Installation
-
-`pip install -r requirements.txt`
-
-`python3 creator.py`
