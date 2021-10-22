@@ -34,8 +34,8 @@ Application will write in these folders
 Name=faf
 GenericName=Forged alliance forever
 Type=Application
-Exec=/home/light/Downloads/downlords-faf-client-1.5.0/downlords-faf-client
-Path=/home/light/Downloads/downlords-faf-client-1.5.0/
+Exec=/home/me/Downloads/downlords-faf-client-1.5.0/downlords-faf-client
+Path=/home/me/Downloads/downlords-faf-client-1.5.0/
 Icon=faf
 Terminal=false
 ```
